@@ -3,6 +3,7 @@ import { useEffect,useState } from "react"
 import BookModel from "../../../Models/BookModel"
 import { error } from "console";
 import { SpinnerLoading } from "../../Utils/SpinnerLoading";
+import { Link } from "react-router-dom";
 
 export const Carousel = () => {
     const [books,setBooks]=useState<BookModel[]>([]);
@@ -59,7 +60,7 @@ export const Carousel = () => {
     return (
         <div className="containet-mt-5" style={{ height: 550 }}>
             <div className="homepage-carousel-title">
-                <h3>Find you next "I stayed up too late reading" book;</h3>
+                <h3>Find your next "I stayed up too late reading" book!</h3>
             </div>
             <div id="carouselExampleControls" className="carousel carousel-dark slide mt-5 d-none d-lg-block"
                 data-bs-interval="false">
@@ -109,7 +110,7 @@ export const Carousel = () => {
                 </div>
             </div>
             <div className="homepage-carousel-title mt-3">
-                <a className="btn btn-outline-secondary btn-lg" href="#">View more..</a>
+                <Link className="btn btn-outline-secondary btn-lg" to="/search">View more..</Link>
             </div>
         </div>
 
