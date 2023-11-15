@@ -9,6 +9,8 @@ export const Navbar = () => {
             <SpinnerLoading/>
         );
     } 
+    
+    console.log(authState);
     const handleLogout = async () => oktaAuth.signOut();
     return (
         <nav className='navbar navbar-expand-lg navbar-dark main-color py-3'>

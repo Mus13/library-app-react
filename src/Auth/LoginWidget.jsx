@@ -11,7 +11,7 @@ const LoginWidget = ({config}) => {
     const onError = (err) => {
         console.log("Sign in error : ",err);
     }
-
+    
     if (!authState) {
         return (
             <SpinnerLoading/>
@@ -19,7 +19,9 @@ const LoginWidget = ({config}) => {
     } 
 
     return (authState.isAuthenticated ?
+        
     <Redirect to={{pathname:"/"}}/>
     :
     <OktaSigninWidget config={config} onSuccess={onSuccess} onError={onError}/>);
+    
 }; export default LoginWidget;
