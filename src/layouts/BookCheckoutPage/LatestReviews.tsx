@@ -22,7 +22,7 @@ export const LatestReviews: React.FC<{
                                 ))
                             }
                             <div className="m-3">
-                                <Link type="button" className="btn main-color btn-md text-white" to="/#">Reach all reviews</Link>
+                                <Link type="button" className="btn main-color btn-md text-white" to={`/reviewList/${props.bookId}`} >Reach all reviews</Link>
                             </div>
                         </>
                         :
