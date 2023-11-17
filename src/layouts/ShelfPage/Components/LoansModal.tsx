@@ -58,7 +58,7 @@ export const LoansModal:React.FC<{mobile:boolean,shelfCurrentLoan:ShelfCurrentLo
                                         Return the book 
                                     </button>
                                     <button data-bs-dismiss="modal"
-                                            onClick={props.shelfCurrentLoan.daysLeft<0?(event)=>event.preventDefault():() => props.renewLoan(props.shelfCurrentLoan.book.id)}
+                                            onClick={props.shelfCurrentLoan.daysLeft<0 ? (event)=>event.preventDefault():() => props.renewLoan(props.shelfCurrentLoan.book.id)}
                                             className={
                                                 props.shelfCurrentLoan.daysLeft<0?
                                                 "list-group-item list-group-item-action inactiveLink"
