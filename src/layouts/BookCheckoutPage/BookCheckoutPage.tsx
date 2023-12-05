@@ -21,6 +21,8 @@ export const BookCheckoutPage = () => {
     const [isReviewLeft,setIsReviewLeft]=useState(false);
     const [isLoadingUserReview,setIsLoadingUserReview]=useState(true);
 
+    const [displayError, setDisplayError] = useState(false);
+
     const { authState } = useOktaAuth();
 
     const [currentLoansCount,setCurrentLoansCount]=useState(0);
@@ -34,7 +36,7 @@ export const BookCheckoutPage = () => {
 
     useEffect(()=>{
         const fetchBook = async () => {
-            const baseUrl:string=`http://localhost:8080/api/books/${BookId}`;
+            const baseUrl:string=`${process.env.REACT_APP_API}/books/${BookId}`;
             const response = await fetch(baseUrl);
             if (!response.ok) {
                 throw new Error("Something went wrong!");
@@ -62,7 +64,7 @@ export const BookCheckoutPage = () => {
 
     useEffect(()=>{
             const fetchBookReview= async ()=>{
-                const reviewUrl:string=`http://localhost:8080/api/reviews/search/findByBookId?bookId=${BookId}`;
+                const reviewUrl:string=`${process.env.REACT_APP_API}/reviews/search/findByBookId?bookId=${BookId}`;
                 const responseReview= await fetch(reviewUrl);
                 if (!responseReview.ok) {
                     throw new Error("Something went wrong");
@@ -99,7 +101,7 @@ export const BookCheckoutPage = () => {
     useEffect(()=>{
         const fetchUserReviewBook= async () => {
                 if (authState && authState.isAuthenticated) {
-                const url=`http://localhost:8080/api/reviews/secure/user/book?bookId=${BookId}`;
+                const url=`${process.env.REACT_APP_API}/reviews/secure/user/book?bookId=${BookId}`;
                 const requestOptions={
                     method:"GET",
                     headers:{
@@ -127,7 +129,7 @@ export const BookCheckoutPage = () => {
     useEffect(()=>{
         const fetchUSerCurrentLoandCount = async () =>{
             if (authState && authState.isAuthenticated) {
-                const url=`http://localhost:8080/api/books/secure/currentloans/count`;
+                const url=`${process.env.REACT_APP_API}/books/secure/currentloans/count`;
                 const requestOptions={
                     method: "GET",
                     headers: {
@@ -155,7 +157,7 @@ export const BookCheckoutPage = () => {
     useEffect(()=>{
         const fetchUserCheckedOutBook = async () =>{
             if (authState && authState.isAuthenticated) {
-                const url=`http://localhost:8080/api/books/secure/ischeckedout/byuser?bookId=${BookId}`;
+                const url=`${process.env.REACT_APP_API}/books/secure/ischeckedout/byuser?bookId=${BookId}`;
                 const requestOptions={
                     method: "GET",
                     headers: {
@@ -195,7 +197,7 @@ export const BookCheckoutPage = () => {
     }
 
     async function checkoutBook() {
-        const url=`http://localhost:8080/api/books/secure/checkout?bookId=${book?.id}`;
+        const url=`${process.env.REACT_APP_API}/books/secure/checkout?bookId=${book?.id}`;
         const requestOptions={
             method: "PUT",
             headers: {
@@ -205,8 +207,10 @@ export const BookCheckoutPage = () => {
         };
         const checkoutResponse= await fetch(url,requestOptions);
         if (!checkoutResponse.ok) {
+            setDisplayError(true);
             throw new Error("Something went wrong!");
         }
+        setDisplayError(false);
         setIsBookCheckedOut(true);
     }
 
@@ -216,7 +220,7 @@ export const BookCheckoutPage = () => {
             bookId=book.id;
         }
         const reviewRequestModel= new ReviewRequestModel(starInput,bookId,reviewDescription)
-        const url=`http://localhost:8080/api/reviews/secure`;
+        const url=`${process.env.REACT_APP_API}/reviews/secure`;
         const requestOptions={
             method: "POST",
             headers: {
@@ -235,6 +239,12 @@ export const BookCheckoutPage = () => {
     return(
         <div>
             <div className="container d-none d-lg-block">
+                {
+                    displayError &&
+                    <div className="alert alert-danger mt-3" role="alert">
+                        Please pay outstanding fees and/or return book(s).
+                    </div>
+                }
                 <div className="row mt-5">
                     <div className="col-sm-2 col-md-2">
                         {
@@ -263,7 +273,7 @@ export const BookCheckoutPage = () => {
                                             currentLoandCount={currentLoansCount} 
                                             isAuthenticated={authState?.isAuthenticated} 
                                             isCheckedOut={isBookCheckedOut} 
-                                            checkOutBook={checkoutBook}
+                                            checkoutBook={checkoutBook}
                                             isReviewLeft={isReviewLeft}
                                             submitReview={submitReview}/>
                 </div>
@@ -271,6 +281,12 @@ export const BookCheckoutPage = () => {
                 <LatestReviews reviews={reviews} bookId={book?.id} mobile={false}/>
             </div>
             <div className="container d-lg-none mt-5">
+                {
+                    displayError &&
+                    <div className="alert alert-danger mt-3" role="alert">
+                        Please pay outstanding fees and/or return book(s).
+                    </div>
+                }
                 <div className="d-flex justify-content-center align-items-center">
                     {
                         book?.img?
@@ -296,7 +312,7 @@ export const BookCheckoutPage = () => {
                                         currentLoandCount={currentLoansCount} 
                                         isAuthenticated={authState?.isAuthenticated} 
                                         isCheckedOut={isBookCheckedOut} 
-                                        checkOutBook={checkoutBook}
+                                        checkoutBook={checkoutBook}
                                         isReviewLeft={isReviewLeft}
                                         submitReview={submitReview}/>
                 <hr/>

@@ -6,7 +6,7 @@ export const CheckoutAndReviewBox:React.FC<{book:BookModel | undefined,mobile:bo
                                             currentLoandCount:number,
                                             isAuthenticated:any,
                                             isCheckedOut:boolean,
-                                            checkOutBook:any,
+                                            checkoutBook:any,
                                             isReviewLeft:boolean,
                                             submitReview:any }> = (props) => {
     
@@ -14,7 +14,7 @@ export const CheckoutAndReviewBox:React.FC<{book:BookModel | undefined,mobile:bo
         if (props.isAuthenticated) {
             if (!props.isCheckedOut && props.currentLoandCount<5) {
                 return(
-                    <button onClick={()=>props.checkOutBook()} className="btn btn-success btn-lg">Checkout</button>
+                    <button onClick={()=>props.checkoutBook()} className="btn btn-success btn-lg">Checkout</button>
                 );
             }else if (props.isCheckedOut) {
                 return(

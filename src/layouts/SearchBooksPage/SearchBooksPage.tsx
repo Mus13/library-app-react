@@ -18,7 +18,7 @@ export const SearchBooksPage = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const urlBase = "http://localhost:8080/api/books";
+            const urlBase = `${process.env.REACT_APP_API}/books`;
             let url = "";
             if (searchUrl === "") {
                 url = `${urlBase}?page=${currentPage - 1}&size=${booksPerPage}`;
@@ -27,7 +27,7 @@ export const SearchBooksPage = () => {
                 url = urlBase + searchWithPage;
             }
             const response = await fetch(url);
-
+            
             if (!response.ok) {
                 throw new Error("Something went wrong!");
             }
@@ -35,6 +35,7 @@ export const SearchBooksPage = () => {
             const responseJson = await response.json();
 
             setTotalAmountOfBooks(responseJson.page.totalElements);
+            
             setTotalPages(responseJson.page.totalPages);
 
             const responseData = responseJson._embedded.books;
@@ -56,10 +57,12 @@ export const SearchBooksPage = () => {
         };
         fetchBooks().catch((error: any) => {
             setIsLoading(false);
-            setHttpError(error);
+            setHttpError(error.message);
         });
         window.scrollTo(0, 0);
     }, [currentPage, searchUrl]);
+
+    
     if (isLoading) {
         return (
             <SpinnerLoading />
@@ -80,7 +83,7 @@ export const SearchBooksPage = () => {
     const paginate = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     }
-
+    
     const searchHandleChange = () => {
         setCurrentPage(1);
         if (search === "") {
@@ -153,8 +156,7 @@ export const SearchBooksPage = () => {
                         </div>
                     </div>
                     {
-                        totalAmountOfBooks > 0 ?
-
+                        totalAmountOfBooks>0 ?
                             <>
                                 <div className="mt-3">
                                     <h5>
@@ -179,7 +181,7 @@ export const SearchBooksPage = () => {
                             </div>
                     }
                     {
-                        totalPages > 1 &&
+                        totalPages>1 &&
                         <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
                     }
                 </div>
